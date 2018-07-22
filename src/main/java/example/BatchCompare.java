@@ -53,7 +53,7 @@ public class BatchCompare {
                 .build();
         ExecutionResult failureUseCaseResult = graphQL.execute(executionInputDeptCustomersUseCase);
         System.out.println("\nExecutionResult with Dept+ Customers Failure case: " + failureUseCaseResult.toSpecification());
-        
+
 
     }
 
