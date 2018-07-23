@@ -16,10 +16,11 @@ public class BatchCompare {
         BatchCompare batchCompare = new BatchCompare();
         System.out.println();
         System.out.println("=== AsyncExecutionStrategy with DataLoader ===");
-        System.out.println("=== Static Wiring ===");
-        GraphQLSchema schema = batchCompare.buildDataLoaderSchema();
-        batchCompare.dataLoaderRun(schema);
+//        System.out.println("=== Static Wiring ===");
+//        GraphQLSchema schema = batchCompare.buildDataLoaderSchema();
+//        batchCompare.dataLoaderRun(schema);
 
+        //Same example with dynamic wiring
         System.out.println("=== Dynamic Wiring ===");
         GraphQLSchema dynamicSchema = batchCompare.buildUsingDynamicWiring();
         batchCompare.dataLoaderRun(dynamicSchema);
@@ -42,13 +43,13 @@ public class BatchCompare {
                 .build();
 
         ExecutionInput executionInputOnlyCustomersSuccessUseCase = ExecutionInput.newExecutionInput()
-                .query("query { shops { id name departments{id name } customers {id name}  } }")
+                .query("query { shops { id name departments{id name subdepartments{id name } products{id name}} customers {id name}  } }")
                 .build();
 
 
         ExecutionResult customersOnlyResults = graphQL.execute(executionInputOnlyCustomersSuccessUseCase);
 
-        System.out.println("\nExecutionResult with Customers Only case: " + customersOnlyResults.toSpecification());
+        System.out.println("\nExecutionResult with nested departments with products: " + customersOnlyResults.toSpecification());
 
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query("query { shops { id name departments{id name subdepartments{id name products{id name}} products{id name}} customers {id name}  } }")
@@ -56,7 +57,7 @@ public class BatchCompare {
 
         ExecutionResult nestQueryResults = graphQL.execute(executionInput);
 
-        System.out.println("\nExecutionResult with nest departments: " + nestQueryResults.toSpecification());
+        System.out.println("\nExecutionResult with nested departments and their subdepartments with their products: " + nestQueryResults.toSpecification());
 
 
     }

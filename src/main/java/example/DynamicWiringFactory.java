@@ -57,7 +57,7 @@ public class DynamicWiringFactory implements WiringFactory {
 
     public boolean providesDataFetcher(FieldWiringEnvironment environment) {
         FieldDefinition fieldDefinition = environment.getFieldDefinition();
-        LOGGER.log(Level.INFO, "Field Definition:[" + fieldDefinition + "]");
+//        LOGGER.log(Level.INFO, "Field Definition:[" + fieldDefinition + "]");
 
         return fieldNameToDataFetchers.containsKey(fieldDefinition.getName());
     }
@@ -65,7 +65,7 @@ public class DynamicWiringFactory implements WiringFactory {
     public DataFetcher getDataFetcher(FieldWiringEnvironment environment) {
 
         FieldDefinition fieldDefinition = environment.getFieldDefinition();
-        LOGGER.log(Level.INFO, "Fetch Field Definition:[" + fieldDefinition + "]");
+//        LOGGER.log(Level.INFO, "Fetch Field Definition:[" + fieldDefinition + "]");
 
         return fieldNameToDataFetchers.get(fieldDefinition.getName());
     }

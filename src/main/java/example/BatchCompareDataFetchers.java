@@ -140,8 +140,18 @@ public class BatchCompareDataFetchers {
         return departments.stream().map(BatchCompareDataFetchers::getProductsForDepartment).collect(Collectors.toList());
     }
 
+    private static void addDepartmentsToFetch(List<Department> departmentsToFetch, Map<String, Department> searchDepartments, String departmentId){
+        if(searchDepartments.containsKey(departmentId)){
+            departmentsToFetch.add(searchDepartments.get(departmentId));
+        }
+    }
+
     private static BatchLoader<String, List<Product>> productsForDepartmentsBatchLoader = ids -> {
-        List<Department> d = ids.stream().map(departments::get).collect(Collectors.toList());
+        final List<Department> d = new ArrayList<>();
+        ids.forEach(id -> addDepartmentsToFetch(d, departments, id)) ;
+        if(d.isEmpty()){
+            ids.forEach(id -> addDepartmentsToFetch(d, subDepartments, id));
+        }
         return CompletableFuture.completedFuture(getProductsForDepartments(d));
     };
 
