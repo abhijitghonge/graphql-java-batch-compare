@@ -3,7 +3,6 @@ package example;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
-import graphql.execution.batched.BatchedExecutionStrategy;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentation;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.*;
@@ -32,34 +31,32 @@ public class BatchCompare {
     private void dataLoaderRun(GraphQLSchema schema) {
 
         DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
-        dataLoaderRegistry.register("departments", BatchCompareDataFetchers.departmentsForShopDataLoader);
+        dataLoaderRegistry.register("departments", BatchCompareDataFetchers.departmentsDataLoader);
+        dataLoaderRegistry.register("subdepartments", BatchCompareDataFetchers.departmentsDataLoader);
         dataLoaderRegistry.register("customers", BatchCompareDataFetchers.customersForShopDataLoader);
-
         dataLoaderRegistry.register("products", BatchCompareDataFetchers.productsForDepartmentDataLoader);
+
         GraphQL graphQL = GraphQL
                 .newGraphQL(schema)
                 .instrumentation(new DataLoaderDispatcherInstrumentation(dataLoaderRegistry))
                 .build();
 
         ExecutionInput executionInputOnlyCustomersSuccessUseCase = ExecutionInput.newExecutionInput()
-                .query("query { shops { id name  customers {id name}  } }")
+                .query("query { shops { id name departments{id name } customers {id name}  } }")
                 .build();
+
+
         ExecutionResult customersOnlyResults = graphQL.execute(executionInputOnlyCustomersSuccessUseCase);
 
         System.out.println("\nExecutionResult with Customers Only case: " + customersOnlyResults.toSpecification());
 
-
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
-                .query("query { shops { id name departments { id name products { id name } }  } }")
+                .query("query { shops { id name departments{id name subdepartments{id name products{id name}} products{id name}} customers {id name}  } }")
                 .build();
-        ExecutionResult result = graphQL.execute(executionInput);
-        System.out.println("\nExecutionResult: " + result.toSpecification());
 
-        ExecutionInput executionInputDeptCustomersUseCase = ExecutionInput.newExecutionInput()
-                .query("query { shops { id name departments { id name products { id name } } customers {id name}  } }")
-                .build();
-        ExecutionResult failureUseCaseResult = graphQL.execute(executionInputDeptCustomersUseCase);
-        System.out.println("\nExecutionResult with Dept+ Customers Failure case: " + failureUseCaseResult.toSpecification());
+        ExecutionResult nestQueryResults = graphQL.execute(executionInput);
+
+        System.out.println("\nExecutionResult with nest departments: " + nestQueryResults.toSpecification());
 
 
     }
@@ -82,10 +79,11 @@ public class BatchCompare {
                         .dataFetcher("shops", BatchCompareDataFetchers.shopsDataFetcher)
                 )
                 .type(TypeRuntimeWiring.newTypeWiring("Shop")
-                        .dataFetcher("departments", BatchCompareDataFetchers.departmentsForShopDataLoaderDataFetcher)
+                        .dataFetcher("departments", BatchCompareDataFetchers.departmentsDataLoaderDataFetcher)
                         .dataFetcher("customers", BatchCompareDataFetchers.customersForShopDataLoaderDataFetcher)
                 )
                 .type(TypeRuntimeWiring.newTypeWiring("Department")
+                        .dataFetcher("subdepartments", BatchCompareDataFetchers.departmentsDataLoaderDataFetcher)
                         .dataFetcher("products", BatchCompareDataFetchers.productsForDepartmentDataLoaderDataFetcher)
                 )
                 .build();

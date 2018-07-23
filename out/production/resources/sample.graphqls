@@ -16,6 +16,7 @@ type Shop {
 type Department {
     id: ID!
     name: String!
+    subdepartments: [Department]
     products: [Product]!
 }
 

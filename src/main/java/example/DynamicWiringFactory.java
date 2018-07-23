@@ -11,9 +11,7 @@ import graphql.schema.idl.FieldWiringEnvironment;
 import graphql.schema.idl.InterfaceWiringEnvironment;
 import graphql.schema.idl.WiringFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +23,8 @@ public class DynamicWiringFactory implements WiringFactory {
 
     public DynamicWiringFactory(){
         fieldNameToDataFetchers.put("shops", BatchCompareDataFetchers.shopsDataFetcher);
-        fieldNameToDataFetchers.put("departments", BatchCompareDataFetchers.departmentsForShopDataLoaderDataFetcher);
+        fieldNameToDataFetchers.put("departments", BatchCompareDataFetchers.departmentsDataLoaderDataFetcher);
+        fieldNameToDataFetchers.put("subdepartments", BatchCompareDataFetchers.departmentsDataLoaderDataFetcher);
         fieldNameToDataFetchers.put("customers", BatchCompareDataFetchers.customersForShopDataLoaderDataFetcher);
         fieldNameToDataFetchers.put("products", BatchCompareDataFetchers.productsForDepartmentDataLoaderDataFetcher);
 

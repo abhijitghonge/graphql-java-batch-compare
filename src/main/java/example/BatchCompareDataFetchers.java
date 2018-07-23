@@ -1,45 +1,40 @@
 package example;
 
 import com.google.common.collect.ImmutableMap;
-import graphql.execution.batched.Batched;
 import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import org.dataloader.BatchLoader;
 import org.dataloader.DataLoader;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class BatchCompareDataFetchers {
     // Shops
     private static final Map<String, Shop> shops = ImmutableMap.<String, Shop>builder()
-            .put("shop-1", new Shop("shop-1", "Shop 1", Arrays.asList("department-1", "department-2", "department-3"),
+            .put("shop-1", new Shop("shop-1", "Shop 1", Arrays.asList("department-1"),
                     Arrays.asList("customer-1", "customer-2")))
-            .put("shop-2", new Shop("shop-2", "Shop 2", Arrays.asList("department-4", "department-5", "department-6"),
+            .put("shop-2", new Shop("shop-2", "Shop 2", Arrays.asList("department-2"),
                     Arrays.asList("customer-3", "customer-4")))
-            .put("shop-3", new Shop("shop-3", "Shop 3", Arrays.asList("department-7", "department-8", "department-9"),
+            .put("shop-3", new Shop("shop-3", "Shop 3", Arrays.asList("department-3"),
                     Arrays.asList("customer-5", "customer-6")))
             .build();
 
 
     // Departments
-    private static Map<String, Department> departments = ImmutableMap.<String, Department>builder()
-            .put("department-1", new Department("department-1", "Department 1", Arrays.asList("product-1")))
-            .put("department-2", new Department("department-2", "Department 2", Arrays.asList("product-2")))
-            .put("department-3", new Department("department-3", "Department 3", Arrays.asList("product-3")))
-            .put("department-4", new Department("department-4", "Department 4", Arrays.asList("product-4")))
-            .put("department-5", new Department("department-5", "Department 5", Arrays.asList("product-5")))
-            .put("department-6", new Department("department-6", "Department 6", Arrays.asList("product-6")))
-            .put("department-7", new Department("department-7", "Department 7", Arrays.asList("product-7")))
-            .put("department-8", new Department("department-8", "Department 8", Arrays.asList("product-8")))
-            .put("department-9", new Department("department-9", "Department 9", Arrays.asList("product-9")))
+    private static final Map<String, Department> departments = ImmutableMap.<String, Department>builder()
+            .put("department-1", new Department("department-1", "Department 1", Arrays.asList("product-1"), Arrays.asList("department-4" )))
+            .put("department-2", new Department("department-2", "Department 2", Arrays.asList("product-2"), Arrays.asList("department-5" )))
+            .put("department-3", new Department("department-3", "Department 3", Arrays.asList("product-3"), Arrays.asList("department-6" )))
             .build();
 
-    private static Map<String, Customer> customers = ImmutableMap.<String, Customer>builder()
+    private static final Map<String, Department> subDepartments = ImmutableMap.<String,Department>builder()
+            .put("department-4", new Department("department-4", "Department 4", Arrays.asList("product-4"), new ArrayList<>()))
+            .put("department-5", new Department("department-5", "Department 5", Arrays.asList("product-5"), new ArrayList<>()))
+            .put("department-6", new Department("department-6", "Department 6", Arrays.asList("product-6"), new ArrayList<>()))
+            .build();
+
+    private static final Map<String, Customer> customers = ImmutableMap.<String, Customer>builder()
             .put("customer-1", new Customer("customer-1","Customer 1"))
             .put("customer-2", new Customer("customer-2","Customer 2"))
             .put("customer-3", new Customer("customer-3","Customer 3"))
@@ -59,19 +54,44 @@ public class BatchCompareDataFetchers {
         return shops.stream().map(BatchCompareDataFetchers::getDepartmentsForShop).collect(Collectors.toList());
     }
 
+    private static List<Department> getDepartmentsForDepartment(Department department) {
+        return department.getDepartmentIds().stream().map(id -> subDepartments.get(id)).collect(Collectors.toList());
+    }
+
+    private static List<List<Department>> getDepartmentsForDepartments(List<Department> departments) {
+        System.out.println("getDepartmentsForDepartments batch: " + departments);
+        return departments.stream().map(BatchCompareDataFetchers::getDepartmentsForDepartment).collect(Collectors.toList());
+    }
 
 
-    private static BatchLoader<String, List<Department>> departmentsForShopsBatchLoader = ids -> {
-        List<Shop> s = ids.stream().map(shops::get).collect(Collectors.toList());
-        return CompletableFuture.completedFuture(getDepartmentsForShops(s));
+
+    private static BatchLoader<String, List<Department>> departmentsBatchLoader = ids -> {
+
+
+        if(shops.keySet().containsAll(ids)){
+            List<Shop> s = ids.stream().map(shops::get).collect(Collectors.toList());
+            return CompletableFuture.completedFuture(getDepartmentsForShops(s));
+        }else{
+            List<Department> d = ids.stream().map(departments::get).collect(Collectors.toList());
+            return CompletableFuture.completedFuture(getDepartmentsForDepartments(d));
+        }
+
     };
 
-    public static DataLoader<String, List<Department>> departmentsForShopDataLoader = new DataLoader<>(departmentsForShopsBatchLoader);
+    public static DataLoader<String, List<Department>> departmentsDataLoader = new DataLoader<>(departmentsBatchLoader);
 
 
-    public static DataFetcher<CompletableFuture<List<Department>>> departmentsForShopDataLoaderDataFetcher = environment -> {
-        Shop shop = environment.getSource();
-        return departmentsForShopDataLoader.load(shop.getId());
+    public static DataFetcher<CompletableFuture<List<Department>>> departmentsDataLoaderDataFetcher = environment -> {
+        final Object source = environment.getSource();
+        String id;
+        if(source instanceof Shop){
+            Shop shop = (Shop) source;
+            id = shop.getId();
+        }else{
+            Department department = (Department) source;
+            id = department.getId();
+        }
+        return departmentsDataLoader.load(id);
     };
 
     private static List<Customer> getCustomersForShop(Shop shop) {
