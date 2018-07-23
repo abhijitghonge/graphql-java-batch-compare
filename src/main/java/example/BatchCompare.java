@@ -16,14 +16,21 @@ public class BatchCompare {
     public static void main(String[] args) throws Exception {
         BatchCompare batchCompare = new BatchCompare();
         System.out.println();
-        batchCompare.dataLoaderRun();
+        System.out.println("=== AsyncExecutionStrategy with DataLoader ===");
+        System.out.println("=== Static Wiring ===");
+        GraphQLSchema schema = batchCompare.buildDataLoaderSchema();
+        batchCompare.dataLoaderRun(schema);
+
+        System.out.println("=== Dynamic Wiring ===");
+        GraphQLSchema dynamicSchema = batchCompare.buildUsingDynamicWiring();
+        batchCompare.dataLoaderRun(dynamicSchema);
+
     }
 
 
 
-    private void dataLoaderRun() {
-        System.out.println("=== AsyncExecutionStrategy with DataLoader ===");
-        GraphQLSchema schema = buildDataLoaderSchema();
+    private void dataLoaderRun(GraphQLSchema schema) {
+
         DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
         dataLoaderRegistry.register("departments", BatchCompareDataFetchers.departmentsForShopDataLoader);
         dataLoaderRegistry.register("customers", BatchCompareDataFetchers.customersForShopDataLoader);
@@ -55,6 +62,16 @@ public class BatchCompare {
         System.out.println("\nExecutionResult with Dept+ Customers Failure case: " + failureUseCaseResult.toSpecification());
 
 
+    }
+
+    private GraphQLSchema buildUsingDynamicWiring() {
+        Reader streamReader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("sample.graphqls"));
+        TypeDefinitionRegistry typeDefinitionRegistry = new SchemaParser().parse(streamReader);
+        RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
+                .wiringFactory(new DynamicWiringFactory())
+                .build();
+
+        return new SchemaGenerator().makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
     }
 
     private GraphQLSchema buildDataLoaderSchema() {
