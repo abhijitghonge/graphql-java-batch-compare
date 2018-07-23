@@ -1,24 +1,574 @@
 # Sample Output
 ```
-=== BatchedExecutionStrategy ===
-getDepartmentsForShops batch: [Shop{id='shop-1', name='Shop 1', departmentIds=[department-1, department-2, department-3]}, Shop{id='shop-2', name='Shop 2', departmentIds=[department-4, department-5, department-6]}, Shop{id='shop-3', name='Shop 3', departmentIds=[department-7, department-8, department-9]}]
-getProductsForDepartments batch: [Department{id='department-1', name='Department 1', productIds=[product-1]}, Department{id='department-2', name='Department 2', productIds=[product-2]}, Department{id='department-3', name='Department 3', productIds=[product-3]}, Department{id='department-4', name='Department 4', productIds=[product-4]}, Department{id='department-5', name='Department 5', productIds=[product-5]}, Department{id='department-6', name='Department 6', productIds=[product-6]}, Department{id='department-7', name='Department 7', productIds=[product-7]}, Department{id='department-8', name='Department 8', productIds=[product-8]}, Department{id='department-9', name='Department 9', productIds=[product-9]}]
-
-ExecutionResult: {data={shops=[{id=shop-1, name=Shop 1, departments=[{id=department-1, name=Department 1, products=[{id=product-1, name=Product 1}]}, {id=department-2, name=Department 2, products=[{id=product-2, name=Product 2}]}, {id=department-3, name=Department 3, products=[{id=product-3, name=Product 3}]}]}, {id=shop-2, name=Shop 2, departments=[{id=department-4, name=Department 4, products=[{id=product-4, name=Product 4}]}, {id=department-5, name=Department 5, products=[{id=product-5, name=Product 5}]}, {id=department-6, name=Department 6, products=[{id=product-6, name=Product 6}]}]}, {id=shop-3, name=Shop 3, departments=[{id=department-7, name=Department 7, products=[{id=product-7, name=Product 7}]}, {id=department-8, name=Department 8, products=[{id=product-8, name=Product 8}]}, {id=department-9, name=Department 9, products=[{id=product-9, name=Product 9}]}]}]}}
-
 === AsyncExecutionStrategy with DataLoader ===
-getDepartmentsForShops batch: [Shop{id='shop-1', name='Shop 1', departmentIds=[department-1, department-2, department-3]}]
-getProductsForDepartments batch: [Department{id='department-1', name='Department 1', productIds=[product-1]}]
-getProductsForDepartments batch: [Department{id='department-2', name='Department 2', productIds=[product-2]}]
-getProductsForDepartments batch: [Department{id='department-3', name='Department 3', productIds=[product-3]}]
-getDepartmentsForShops batch: [Shop{id='shop-2', name='Shop 2', departmentIds=[department-4, department-5, department-6]}]
-getProductsForDepartments batch: [Department{id='department-4', name='Department 4', productIds=[product-4]}]
-getProductsForDepartments batch: [Department{id='department-5', name='Department 5', productIds=[product-5]}]
-getProductsForDepartments batch: [Department{id='department-6', name='Department 6', productIds=[product-6]}]
-getDepartmentsForShops batch: [Shop{id='shop-3', name='Shop 3', departmentIds=[department-7, department-8, department-9]}]
-getProductsForDepartments batch: [Department{id='department-7', name='Department 7', productIds=[product-7]}]
-getProductsForDepartments batch: [Department{id='department-8', name='Department 8', productIds=[product-8]}]
-getProductsForDepartments batch: [Department{id='department-9', name='Department 9', productIds=[product-9]}]
+=== Static Wiring ===
+getDepartmentsForShops batch: [Shop{id='shop-1', name='Shop 1', departmentIds=[department-1], customerIds=[customer-1, customer-2]}, Shop{id='shop-2', name='Shop 2', departmentIds=[department-2], customerIds=[customer-3, customer-4]}, Shop{id='shop-3', name='Shop 3', departmentIds=[department-3], customerIds=[customer-5, customer-6]}]
+getCustomersForShop batch: [Shop{id='shop-1', name='Shop 1', departmentIds=[department-1], customerIds=[customer-1, customer-2]}, Shop{id='shop-2', name='Shop 2', departmentIds=[department-2], customerIds=[customer-3, customer-4]}, Shop{id='shop-3', name='Shop 3', departmentIds=[department-3], customerIds=[customer-5, customer-6]}]
 
-ExecutionResult: {data={shops=[{id=shop-1, name=Shop 1, departments=[{id=department-1, name=Department 1, products=[{id=product-1, name=Product 1}]}, {id=department-2, name=Department 2, products=[{id=product-2, name=Product 2}]}, {id=department-3, name=Department 3, products=[{id=product-3, name=Product 3}]}]}, {id=shop-2, name=Shop 2, departments=[{id=department-4, name=Department 4, products=[{id=product-4, name=Product 4}]}, {id=department-5, name=Department 5, products=[{id=product-5, name=Product 5}]}, {id=department-6, name=Department 6, products=[{id=product-6, name=Product 6}]}]}, {id=shop-3, name=Shop 3, departments=[{id=department-7, name=Department 7, products=[{id=product-7, name=Product 7}]}, {id=department-8, name=Department 8, products=[{id=product-8, name=Product 8}]}, {id=department-9, name=Department 9, products=[{id=product-9, name=Product 9}]}]}]}}
+ExecutionResult with Customers Only case: {data={shops=[{id=shop-1, name=Shop 1, departments=[{id=department-1, name=Department 1}], customers=[{id=customer-1, name=Customer 1}, {id=customer-2, name=Customer 2}]}, {id=shop-2, name=Shop 2, departments=[{id=department-2, name=Department 2}], customers=[{id=customer-3, name=Customer 3}, {id=customer-4, name=Customer 4}]}, {id=shop-3, name=Shop 3, departments=[{id=department-3, name=Department 3}], customers=[{id=customer-5, name=Customer 5}, {id=customer-6, name=Customer 6}]}]}}
+getDepartmentsForDepartments batch: [Department{id='department-1', name='Department 1', productIds=[product-1], departmentIds=[department-4]}, Department{id='department-2', name='Department 2', productIds=[product-2], departmentIds=[department-5]}, Department{id='department-3', name='Department 3', productIds=[product-3], departmentIds=[department-6]}]
+getProductsForDepartments batch: [Department{id='department-1', name='Department 1', productIds=[product-1], departmentIds=[department-4]}, Department{id='department-2', name='Department 2', productIds=[product-2], departmentIds=[department-5]}, Department{id='department-3', name='Department 3', productIds=[product-3], departmentIds=[department-6]}, null, null, null]
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[0]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[1]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[2]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[0]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[1]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[2]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:21)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+
+ExecutionResult with nest departments: {data={shops=[{id=shop-1, name=Shop 1, departments=[null], customers=[{id=customer-1, name=Customer 1}, {id=customer-2, name=Customer 2}]}, {id=shop-2, name=Shop 2, departments=[null], customers=[{id=customer-3, name=Customer 3}, {id=customer-4, name=Customer 4}]}, {id=shop-3, name=Shop 3, departments=[null], customers=[{id=customer-5, name=Customer 5}, {id=customer-6, name=Customer 6}]}]}, errors=[{message=Exception while fetching data (/shops[0]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 0, departments, 0, products]}, {message=Exception while fetching data (/shops[1]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 1, departments, 0, products]}, {message=Exception while fetching data (/shops[2]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 2, departments, 0, products]}, {message=Exception while fetching data (/shops[0]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 0, departments, 0, subdepartments, 0, products]}, {message=Exception while fetching data (/shops[1]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 1, departments, 0, subdepartments, 0, products]}, {message=Exception while fetching data (/shops[2]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 2, departments, 0, subdepartments, 0, products]}]}
+=== Dynamic Wiring ===
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='id', type=NonNullType{type=TypeName{name='ID'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='name', type=NonNullType{type=TypeName{name='String'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='id', type=NonNullType{type=TypeName{name='ID'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='name', type=NonNullType{type=TypeName{name='String'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='subdepartments', type=ListType{type=TypeName{name='Department'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory getDataFetcher
+INFO: Fetch Field Definition:[FieldDefinition{name='subdepartments', type=ListType{type=TypeName{name='Department'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='id', type=NonNullType{type=TypeName{name='ID'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='name', type=NonNullType{type=TypeName{name='String'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='products', type=NonNullType{type=ListType{type=TypeName{name='Product'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory getDataFetcher
+INFO: Fetch Field Definition:[FieldDefinition{name='products', type=NonNullType{type=ListType{type=TypeName{name='Product'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='departments', type=NonNullType{type=ListType{type=TypeName{name='Department'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory getDataFetcher
+INFO: Fetch Field Definition:[FieldDefinition{name='departments', type=NonNullType{type=ListType{type=TypeName{name='Department'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='id', type=NonNullType{type=TypeName{name='ID'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='name', type=NonNullType{type=TypeName{name='String'}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='customers', type=NonNullType{type=ListType{type=TypeName{name='Customer'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory getDataFetcher
+INFO: Fetch Field Definition:[FieldDefinition{name='customers', type=NonNullType{type=ListType{type=TypeName{name='Customer'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory providesDataFetcher
+INFO: Field Definition:[FieldDefinition{name='shops', type=NonNullType{type=ListType{type=TypeName{name='Shop'}}}, inputValueDefinitions=[], directives=[]}]
+Jul 23, 2018 6:11:45 PM example.DynamicWiringFactory getDataFetcher
+INFO: Fetch Field Definition:[FieldDefinition{name='shops', type=NonNullType{type=ListType{type=TypeName{name='Shop'}}}, inputValueDefinitions=[], directives=[]}]
+
+ExecutionResult with Customers Only case: {data={shops=[{id=shop-1, name=Shop 1, departments=[{id=department-1, name=Department 1}], customers=[{id=customer-1, name=Customer 1}, {id=customer-2, name=Customer 2}]}, {id=shop-2, name=Shop 2, departments=[{id=department-2, name=Department 2}], customers=[{id=customer-3, name=Customer 3}, {id=customer-4, name=Customer 4}]}, {id=shop-3, name=Shop 3, departments=[{id=department-3, name=Department 3}], customers=[{id=customer-5, name=Customer 5}, {id=customer-6, name=Customer 6}]}]}}
+getProductsForDepartments batch: [null, Department{id='department-1', name='Department 1', productIds=[product-1], departmentIds=[department-4]}, null, Department{id='department-2', name='Department 2', productIds=[product-2], departmentIds=[department-5]}, null, Department{id='department-3', name='Department 3', productIds=[product-3], departmentIds=[department-6]}]
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[0]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[0]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[1]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[1]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[2]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+[main] WARN graphql.execution.SimpleDataFetcherExceptionHandler - Exception while fetching data (/shops[2]/departments[0]/products) : java.lang.NullPointerException
+java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:292)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:308)
+	at java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:593)
+	at java.util.concurrent.CompletableFuture.uniApplyStage(CompletableFuture.java:614)
+	at java.util.concurrent.CompletableFuture.thenApply(CompletableFuture.java:1983)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:312)
+	at org.dataloader.DataLoader.dispatch(DataLoader.java:272)
+	at java.util.ArrayList.forEach(ArrayList.java:1249)
+	at org.dataloader.DataLoaderRegistry.dispatchAll(DataLoaderRegistry.java:94)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatch(FieldLevelTrackingApproach.java:253)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$CallStack.dispatchIfNotDispatchedBefore(FieldLevelTrackingApproach.java:105)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.dispatchIfNeeded(FieldLevelTrackingApproach.java:235)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.handleOnFieldValuesInfo(FieldLevelTrackingApproach.java:177)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach.access$000(FieldLevelTrackingApproach.java:32)
+	at graphql.execution.instrumentation.dataloader.FieldLevelTrackingApproach$1.onFieldValuesInfo(FieldLevelTrackingApproach.java:154)
+	at graphql.execution.AsyncExecutionStrategy.lambda$execute$1(AsyncExecutionStrategy.java:83)
+	at java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:760)
+	at java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:778)
+	at java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2140)
+	at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:76)
+	at graphql.execution.Execution.executeOperation(Execution.java:158)
+	at graphql.execution.Execution.execute(Execution.java:100)
+	at graphql.GraphQL.execute(GraphQL.java:554)
+	at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:496)
+	at graphql.GraphQL.executeAsync(GraphQL.java:470)
+	at graphql.GraphQL.execute(GraphQL.java:401)
+	at example.BatchCompare.dataLoaderRun(BatchCompare.java:57)
+	at example.BatchCompare.main(BatchCompare.java:25)
+Caused by: java.lang.NullPointerException
+	at example.BatchCompareDataFetchers.getProductsForDepartment(BatchCompareDataFetchers.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1374)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at example.BatchCompareDataFetchers.getProductsForDepartments(BatchCompareDataFetchers.java:140)
+	at example.BatchCompareDataFetchers.lambda$static$9(BatchCompareDataFetchers.java:145)
+	at org.dataloader.DataLoader.dispatchQueueBatch(DataLoader.java:306)
+	... 22 more
+
+ExecutionResult with nest departments: {data={shops=[{id=shop-1, name=Shop 1, departments=[null], customers=[{id=customer-1, name=Customer 1}, {id=customer-2, name=Customer 2}]}, {id=shop-2, name=Shop 2, departments=[null], customers=[{id=customer-3, name=Customer 3}, {id=customer-4, name=Customer 4}]}, {id=shop-3, name=Shop 3, departments=[null], customers=[{id=customer-5, name=Customer 5}, {id=customer-6, name=Customer 6}]}]}, errors=[{message=Exception while fetching data (/shops[0]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 0, departments, 0, subdepartments, 0, products]}, {message=Exception while fetching data (/shops[0]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 0, departments, 0, products]}, {message=Exception while fetching data (/shops[1]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 1, departments, 0, subdepartments, 0, products]}, {message=Exception while fetching data (/shops[1]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 1, departments, 0, products]}, {message=Exception while fetching data (/shops[2]/departments[0]/subdepartments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=68}], path=[shops, 2, departments, 0, subdepartments, 0, products]}, {message=Exception while fetching data (/shops[2]/departments[0]/products) : java.lang.NullPointerException, locations=[{line=1, column=87}], path=[shops, 2, departments, 0, products]}]}
+
+Process finished with exit code 0
+
 ```
